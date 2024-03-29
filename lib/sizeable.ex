@@ -34,7 +34,7 @@ defmodule Sizeable do
     filesize(parsed, options)
   end
 
-  def filesize(0.0, options) do
+  def filesize(+0.0, options) do
     spacer = Keyword.get(options, :spacer, " ")
     bits = Keyword.get(options, :bits, false)
     output = Keyword.get(options, :output, :string)
