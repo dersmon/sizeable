@@ -17,6 +17,32 @@ defmodule Sizeable do
     filesize(value, [])
   end
 
+  @doc """
+  Returns a human-readable string for the given numeric value.
+
+  ## Arguments:
+
+  * `value` (Integer/Float/String) representing the filesize to be converted.
+  * `options` (Struct) representing the options to determine base, rounding and units.
+
+  ## Options
+
+  * `:bits` - `true` if the result should be in bits, `false` if in bytes. Defaults to `false`.
+  * `:spacer` - the string that should be between the number and the unit. Defaults to `" "`.
+  * `:round` - the precision that the number should be rounded down to. Defaults to `2`.
+  * `:base` - the base for exponent calculation. `2` for binary-based numbers,
+    any other Integer can be used. Defaults to `2`.
+  * `:output` - the ouput format to be used, possible options are `:string`,
+    `:list`, or `:map`. Defaults to `:string`.
+
+  ## Examples
+
+  Get bit-sized file size for 1024 byte.
+
+      Sizeable.filesize(1024, bits: true)
+      "8 Kb"
+
+  """
   def filesize(value, options) when is_map(options) do
     Logger.warning("Using maps for options is deprecated. Please use Keyword Lists.")
     filesize(value, Map.to_list(options))
@@ -47,32 +73,6 @@ defmodule Sizeable do
     filesize_output(output, 0, unit, spacer)
   end
 
-  @doc """
-  Returns a human-readable string for the given numeric value.
-
-  ## Arguments:
-
-  * `value` (Integer/Float/String) representing the filesize to be converted.
-  * `options` (Struct) representing the options to determine base, rounding and units.
-
-  ## Options
-
-  * `:bits` - `true` if the result should be in bits, `false` if in bytes. Defaults to `false`.
-  * `:spacer` - the string that should be between the number and the unit. Defaults to `" "`.
-  * `:round` - the precision that the number should be rounded down to. Defaults to `2`.
-  * `:base` - the base for exponent calculation. `2` for binary-based numbers,
-    any other Integer can be used. Defaults to `2`.
-  * `:output` - the ouput format to be used, possible options are `:string`,
-    `:list`, or `:map`. Defaults to `:string`.
-
-  ## Examples
-
-  Get bit-sized file size for 1024 byte.
-
-      Sizeable.filesize(1024, bits: true)
-      "8 Kb"
-
-  """
   def filesize(value, options) when (is_float(value) and is_list(options)) do
     bits = Keyword.get(options, :bits, false)
     base = Keyword.get(options, :base, 2)
